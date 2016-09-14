@@ -13,14 +13,6 @@ describe EstimateCalculator do
 	describe '#calculate' do
 		let(:demographics) { {age: '20', gender: "male", location: "Some Location", conditions: ["n/a"]} }
 
-		context 'when candidate has more than one health condition' do
-			it 'makes correct price adjustments for each condition' do
-				demographics = {age: '30', gender: "female", location: "New York", conditions: ['Heart Disease', 'High Cholesterol']}
-				estimate_calculator = EstimateCalculator.new(demographics)
-				expect(estimate_calculator.calculate).to eq(154.25)
-			end
-		end
-
 		context 'every 5 years over minimum age of 18' do
 			specify 'exactly 5 years over age $20 increase' do
 				demographics[:age] = '23'
@@ -74,6 +66,14 @@ describe EstimateCalculator do
 			  expect(subject.estimate(demographics)).to eq(101)
 			end
 
+			context 'when candidate has more than one health condition' do
+				it 'makes correct price adjustments for each condition' do
+					demographics = {age: '30', gender: "female", location: "New York", conditions: ['Heart Disease', 'High Cholesterol']}
+					estimate_calculator = EstimateCalculator.new(demographics)
+					expect(estimate_calculator.calculate).to eq(154.25)
+				end
+			end
+
 			it 'increases by 6 percent for sleep apnea' do
 				demographics[:conditions] = ['Sleep Apnea']
 				expect(subject.estimate(demographics)).to eq(106)
@@ -92,12 +92,6 @@ describe EstimateCalculator do
 			it 'increases by 8 percent for high cholesterol' do
 				demographics[:conditions] = ['High Cholesterol']
 				expect(subject.estimate(demographics)).to eq(108)
-			end
-
-			it 'gives correct output' do
-				expect(subject.estimate({
-					age: '40', gender: "male", location: "Seattle", conditions: ["Sleep Apnea"]}
-					)).to eq(190.8)
 			end
 		end
 	end
