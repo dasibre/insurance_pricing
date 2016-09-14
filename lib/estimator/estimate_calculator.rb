@@ -1,4 +1,3 @@
-require 'pry'
 class EstimateCalculator
 	class << self
 		def estimate(opts = {})
@@ -12,7 +11,7 @@ class EstimateCalculator
 		@age = attrs.fetch(:age).to_i
 		@gender = attrs.fetch(:gender)
 		@location = attrs.fetch(:location)
-		@conditions = attrs.fetch(:conditions, ['n/a'])
+		@conditions = attrs.fetch(:conditions)
 		@base_cost = individual_base_cost
 	end
 
@@ -24,7 +23,7 @@ class EstimateCalculator
 	private
 
 	def individual_base_cost
-		base = age_based_price_inc * ((age - minimum_age_eligibility) / 5) + annual_base_cost
+		age_based_price_inc * ((age - minimum_age_eligibility) / 5) + annual_base_cost
 	end
 
 	def annual_base_cost
@@ -37,12 +36,7 @@ class EstimateCalculator
 		adjusted_price - gender_discount
 	end
 
-	def discounts
-		base_cost - (gender_discount + (base_cost * location_discount).to_i)
-	end
-
 	def precond_increases
-		#TODO iterate through conditions for total increase
 		conditions.reduce(0.0) do |total,condition|
 			total += health_conditions.fetch(condition.downcase,0)
 			total
