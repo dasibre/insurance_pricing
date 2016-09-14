@@ -17,7 +17,9 @@ class EstimateCalculator
 
 	def calculate
 		return 0 if age < minimum_age_eligibility
-		final_price = apply_price_adjustments
+		adjusted_price = base_cost - (base_cost * location_discount).to_i
+		adjusted_price = adjusted_price + (adjusted_price * precond_increases)
+		adjusted_price - gender_discount
 	end
 
 	private
@@ -28,12 +30,6 @@ class EstimateCalculator
 
 	def annual_base_cost
 		100
-	end
-
-  def apply_price_adjustments
-		adjusted_price = base_cost - (base_cost * location_discount).to_i
-		adjusted_price = adjusted_price + (adjusted_price * precond_increases)
-		adjusted_price - gender_discount
 	end
 
 	def precond_increases
