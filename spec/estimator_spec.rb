@@ -5,18 +5,18 @@ describe EstimateCalculator do
 
 	describe '.estimate' do
 		it 'calculates price for given demographics' do
-			demographics = {age: '20', gender: "male", location: "Some Location", condition: "n/a"}
+			demographics = {age: '20', gender: "male", location: "Some Location", conditions: ["n/a"]}
 			expect(subject.estimate(demographics)).to eq(100)
 		end
 	end
 
 	describe '#calculate' do
-		let(:demographics) { {age: '20', gender: "male", location: "Some Location", condition: "n/a"} }
+		let(:demographics) { {age: '20', gender: "male", location: "Some Location", conditions: ["n/a"]} }
 
 		context 'when candidate has more than one health condition' do
 			it 'makes correct price adjustments for each condition' do
-				demo = {age: '30', gender: "female", location: "New York", conditions: ['Heart Disease', 'High Cholesterol']}
-				estimate_calculator = EstimateCalculator.new(demo)
+				demographics = {age: '30', gender: "female", location: "New York", conditions: ['Heart Disease', 'High Cholesterol']}
+				estimate_calculator = EstimateCalculator.new(demographics)
 				expect(estimate_calculator.calculate).to eq(154.25)
 			end
 		end
@@ -61,8 +61,8 @@ describe EstimateCalculator do
 			end
 		end
 
-		context 'when east coast location' do
-			it 'receives 5 percent discount' do
+		context 'location price discount' do
+			it 'receives 5 percent discount for east coast' do
 				demographics[:location] = 'New York'
 				expect(subject.estimate(demographics)).to eq(95)
 			end
@@ -70,33 +70,33 @@ describe EstimateCalculator do
 
 		context 'pre-condition price adjustments' do
 			it 'increases by 1 percent for allergies' do
-				demographics[:condition] = 'Allergies'
+				demographics[:conditions] = ['Allergies']
 			  expect(subject.estimate(demographics)).to eq(101)
 			end
 
 			it 'increases by 6 percent for sleep apnea' do
-				demographics[:condition] = 'Sleep Apnea'
+				demographics[:conditions] = ['Sleep Apnea']
 				expect(subject.estimate(demographics)).to eq(106)
 			end
 
 			it 'increases by 4 percent for asthma' do
-				demographics[:condition] = 'Asthma'
+				demographics[:conditions] = ['Asthma']
 				expect(subject.estimate(demographics)).to eq(104)
 			end
 
 			it 'increases by 17 percent for heart disease' do
-				demographics[:condition] = 'Heart Disease'
+				demographics[:conditions] = ['Heart Disease']
 				expect(subject.estimate(demographics)).to eq(117)
 			end
 
 			it 'increases by 8 percent for high cholesterol' do
-				demographics[:condition] = 'High Cholesterol'
+				demographics[:conditions] = ['High Cholesterol']
 				expect(subject.estimate(demographics)).to eq(108)
 			end
 
 			it 'gives correct output' do
 				expect(subject.estimate({
-					age: '40', gender: "male", location: "Seattle", condition: "Sleep Apnea"}
+					age: '40', gender: "male", location: "Seattle", conditions: ["Sleep Apnea"]}
 					)).to eq(190.8)
 			end
 		end
