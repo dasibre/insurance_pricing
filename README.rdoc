@@ -1,0 +1,14 @@
+== README
+Created by James Naadjie
+
+* Ruby version
+  - ruby 2.2.5p319
+
+*Dependencies
+  - Rspec 3
+
+*Setup
+  -Run bundle install
+
+
+
